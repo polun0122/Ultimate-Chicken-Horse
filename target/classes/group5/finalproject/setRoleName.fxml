@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="group5.finalproject.SetRoleName">
+    <children>
+        <Button focusTraversable="false" layoutX="40.0" layoutY="40.0" mnemonicParsing="false" onAction="#onBackPress"
+                text="上一步">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Button>
+        <Label layoutX="306.0" layoutY="163.0" text="設定玩家名稱">
+            <font>
+                <Font size="48.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="tfPlayer1Name" layoutX="179.0" layoutY="317.0" prefHeight="48.0" prefWidth="225.0"
+                   text="Player 1">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </TextField>
+        <TextField fx:id="tfPlayer2Name" layoutX="496.0" layoutY="317.0" prefHeight="48.0" prefWidth="225.0"
+                   text="Player 2">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </TextField>
+        <Button fx:id="btnPlayer1Cancel" disable="true" layoutX="179.0" layoutY="377.0" mnemonicParsing="false"
+                onAction="#onPlayer1ModifyPressed" prefHeight="48.0" prefWidth="105.0" text="修改">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="btnPlayer1Set" layoutX="300.0" layoutY="377.0" mnemonicParsing="false"
+                onAction="#onPlayer1SetPressed" prefHeight="48.0" prefWidth="105.0" text="確認">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="btnPlayer2Cancel" disable="true" layoutX="496.0" layoutY="377.0" mnemonicParsing="false"
+                onAction="#onPlayer2ModifyPressed" prefHeight="48.0" prefWidth="105.0" text="修改">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="btnPlayer2Set" layoutX="616.0" layoutY="377.0" mnemonicParsing="false"
+                onAction="#onPlayer2SetPressed" prefHeight="48.0" prefWidth="105.0" text="確認">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Button>
+    </children>
+</AnchorPane>

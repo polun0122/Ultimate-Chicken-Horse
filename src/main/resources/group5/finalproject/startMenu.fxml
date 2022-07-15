@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group5.finalproject.StartMenuController">
+    <children>
+        <Button layoutX="294.0" layoutY="356.0" mnemonicParsing="false" onAction="#onStartPressed" prefHeight="60.0" prefWidth="125.0" text="開始">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+        <Button layoutX="482.0" layoutY="356.0" mnemonicParsing="false" onAction="#onExitPressed" prefHeight="60.0" prefWidth="125.0" text="結束">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+        <Label layoutX="306.0" layoutY="201.0" text="超級雞馬">
+            <font>
+                <Font size="72.0" />
+            </font>
+        </Label>
+    </children>
+</Pane>
