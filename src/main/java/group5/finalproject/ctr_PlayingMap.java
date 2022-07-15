@@ -23,7 +23,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.List;
 
-public class PlayingMap implements EventHandler<KeyEvent> {
+public class ctr_PlayingMap implements EventHandler<KeyEvent> {
     boolean isPlayer1BlockPlaced = false; /* 玩家1 的方塊是否已放好 */
     boolean isPlayer2BlockPlaced = false; /* 玩家2 的方塊是否已放好 */
     boolean isPlayer1DeadHandled = false; /* 玩家1 死亡後的處理是否完成 */

@@ -1,11 +1,10 @@
 package group5.finalproject;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
 
-public class StartMenuController {
+public class ctr_StartMenu {
     @FXML
     public void onStartPressed() throws IOException {
         Main.setRoleNameScene.getRoot().requestFocus();

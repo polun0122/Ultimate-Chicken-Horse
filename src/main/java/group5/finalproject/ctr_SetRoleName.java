@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class SetRoleName {
+public class ctr_SetRoleName {
     @FXML
     TextField tfPlayer1Name;
     @FXML

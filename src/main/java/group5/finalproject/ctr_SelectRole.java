@@ -16,7 +16,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
-public class SelectRole implements EventHandler<KeyEvent> {
+public class ctr_SelectRole implements EventHandler<KeyEvent> {
     int player1Index = 0; /* 玩家1 框選方塊位置指標 */
     int player2Index = 0; /* 玩家2 框選方塊位置指標 */
     boolean isP1Selected = false; /* 玩家1 是否已確定角色 */

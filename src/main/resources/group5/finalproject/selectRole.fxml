@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#handle" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group5.finalproject.SelectRole">
+<AnchorPane onKeyPressed="#handle" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group5.finalproject.ctr_SelectRole">
     <children>
         <Button focusTraversable="false" layoutX="40.0" layoutY="40.0" mnemonicParsing="false" onAction="#onBackPress" text="上一步">
             <font>
