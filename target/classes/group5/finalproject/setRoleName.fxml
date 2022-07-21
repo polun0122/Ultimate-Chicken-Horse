@@ -5,7 +5,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="group5.finalproject.SetRoleName">
+            fx:controller="group5.finalproject.ctr_SetRoleName">
     <children>
         <Button focusTraversable="false" layoutX="40.0" layoutY="40.0" mnemonicParsing="false" onAction="#onBackPress"
                 text="上一步">

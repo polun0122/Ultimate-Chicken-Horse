@@ -287,14 +287,16 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
                     case A:
                         /* 停止左移 */
                         if (Main.player1.status == Player.Status.LeftMove) {
-                            Main.player1.addFriction();
+                            if (Main.player1.blockTypeNumberUnderFoot != 0)
+                                Main.player1.friction.add();
                             Main.player1.status = Player.Status.Idle;
                         }
                         break;
                     case D:
                         /* 停止右移 */
                         if (Main.player1.status == Player.Status.RightMove) {
-                            Main.player1.addFriction();
+                            if (Main.player1.blockTypeNumberUnderFoot != 0)
+                                Main.player1.friction.add();
                             Main.player1.status = Player.Status.Idle;
                         }
                         break;
@@ -310,14 +312,16 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
                     case LEFT:
                         /* 停止左移 */
                         if (Main.player2.status == Player.Status.LeftMove) {
-                            Main.player2.addFriction();
+                            if (Main.player2.blockTypeNumberUnderFoot != 0)
+                                Main.player2.friction.add();
                             Main.player2.status = Player.Status.Idle;
                         }
                         break;
                     case RIGHT:
                         /* 停止右移 */
                         if (Main.player2.status == Player.Status.RightMove) {
-                            Main.player2.addFriction();
+                            if (Main.player2.blockTypeNumberUnderFoot != 0)
+                              Main.player2.friction.add();
                             Main.player2.status = Player.Status.Idle;
                         }
                         break;
@@ -525,19 +529,17 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
                 btnExit.setVisible(true);
             } else if (Main.roundCount >= 10) {
                 /* 已達回合上限(10回合) */
-                if (Main.player1.score > Main.player2.score){
+                if (Main.player1.score > Main.player2.score) {
                     /* 玩家1獲勝 */
                     resultTitle.setText(Main.player1.name + " 獲勝！");
                     btnNextRound.setVisible(false);
                     btnExit.setVisible(true);
-                }
-                else if (Main.player1.score < Main.player2.score){
+                } else if (Main.player1.score < Main.player2.score) {
                     /* 玩家2獲勝 */
                     resultTitle.setText(Main.player2.name + " 獲勝！");
                     btnNextRound.setVisible(false);
                     btnExit.setVisible(true);
-                }
-                else {
+                } else {
                     /* 玩家平手 */
                     resultTitle.setText(resultTitle.getText() + "平手！");
                     btnNextRound.setVisible(false);

@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="scene" onKeyPressed="#handle" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group5.finalproject.PlayingMap">
+<AnchorPane fx:id="scene" onKeyPressed="#handle" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group5.finalproject.ctr_PlayingMap">
    <children>
       <GridPane fx:id="gridPaneBlocks" gridLinesVisible="true" layoutX="150.0" layoutY="50.0" prefHeight="500.0" prefWidth="600.0">
         <columnConstraints>
