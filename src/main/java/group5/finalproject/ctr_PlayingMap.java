@@ -212,33 +212,32 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
             for (int j = 0; j < Main.blockDistribution[0].length; j++) {
                 Rectangle rectangleTemp = (Rectangle) nodes.get(j + i * Main.blockDistribution[0].length);
                 switch (Main.blockDistribution[i][j]) {
-                    case 1: /* Normal */
+                    case 1 -> { /* Normal */
                         rectangleTemp.setStroke(BlockType.Normal.getFrameColor());
                         rectangleTemp.setFill(BlockType.Normal.getFillColor());
                         rectangleTemp.setOpacity(1);
                         rectangleTemp.setVisible(true);
-                        break;
-                    case 2: /* Ice */
+                    }
+                    case 2 -> { /* Ice */
                         rectangleTemp.setStroke(BlockType.Ice.getFrameColor());
                         rectangleTemp.setFill(BlockType.Ice.getFillColor());
                         rectangleTemp.setOpacity(1);
                         rectangleTemp.setVisible(true);
-                        break;
-                    case 3: /* Honey */
+                    }
+                    case 3 -> { /* Honey */
                         rectangleTemp.setStroke(BlockType.Honey.getFrameColor());
                         rectangleTemp.setFill(BlockType.Honey.getFillColor());
                         rectangleTemp.setOpacity(1);
                         rectangleTemp.setVisible(true);
-                        break;
-                    case 4: /* Trap */
+                    }
+                    case 4 -> { /* Trap */
                         rectangleTemp.setStroke(BlockType.Trap.getFrameColor());
                         rectangleTemp.setFill(BlockType.Trap.getFillColor());
                         rectangleTemp.setOpacity(1);
                         rectangleTemp.setVisible(true);
-                        break;
-                    default: /* case 0 */
-                        rectangleTemp.setVisible(false);
-                        break;
+                    }
+                    default -> /* case 0 */
+                            rectangleTemp.setVisible(false);
                 }
             }
         }
@@ -330,7 +329,7 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
         }
     }
 
-    private EventHandler<KeyEvent> handlePressPlay = new EventHandler<KeyEvent>() {
+    private final EventHandler<KeyEvent> handlePressPlay = new EventHandler<KeyEvent>() {
         /* (按下)腳色在地圖中自由移動時使用這個處理鍵盤事件 */
         @Override
         public void handle(KeyEvent e) {
@@ -384,7 +383,7 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
         }
     };
 
-    private EventHandler<KeyEvent> handleReleasePlay = new EventHandler<KeyEvent>() {
+    private final EventHandler<KeyEvent> handleReleasePlay = new EventHandler<>() {
         /* (鬆開)腳色在地圖中自由移動時使用這個處理鍵盤事件 */
         @Override
         public void handle(KeyEvent e) {
@@ -548,7 +547,7 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
     }
 
     @FXML
-    public void onExitPressed() throws IOException {
+    public void onExitPressed() {
         Main.currentStage.close();
         System.exit(0);
     }

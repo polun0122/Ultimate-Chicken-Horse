@@ -32,7 +32,7 @@ public class Player {
     /* 在方塊上的跳躍初速度，越快跳躍高 */
     private final int velocity_jump_Normal = 260;
     private final int velocity_jump_Ice = 260;
-    private final int velocity_jump_Honey = 230;
+    private final int velocity_jump_Honey = 225;
 
     /* 遊戲畫面大小設定 */
     private final int gameHeight = 600; /* 畫面高度 */
@@ -89,7 +89,7 @@ public class Player {
                 case 3 -> velocity_x = velocity_x_Honey; /* Honey */
                 default -> velocity_x = velocity_x_Normal; /* Normal */
             }
-            this.move((float) (velocity_x / 100), 0);
+            this.move(velocity_x / 100, 0);
         }
     }
 
@@ -102,7 +102,7 @@ public class Player {
                 case 3 -> velocity_x = -velocity_x_Honey; /* Honey */
                 default -> velocity_x = -velocity_x_Normal; /* Normal */
             }
-            this.move((float) (velocity_x / 100), 0);
+            this.move(velocity_x / 100, 0);
         }
     }
 
