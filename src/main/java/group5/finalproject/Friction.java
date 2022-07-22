@@ -44,7 +44,7 @@ public class Friction {
         /* 摩擦力模擬引擎 */
         @Override
         public void run() {
-            if (player.status != Player.Status.Finish && player.status != Player.Status.Dead) {
+            if (player.getStatus() != Player.Status.Finish && player.getStatus() != Player.Status.Dead) {
                 float dt = (float) (timeInterval / 1000.0); /* 物理引擎執行週期 */
                 /* 讓腳色在x軸煞車 */
                 float friction; /* 摩擦力設定，單位: pixel per second square*/

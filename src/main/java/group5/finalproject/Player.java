@@ -7,7 +7,7 @@ public class Player {
         Idle, RightMove, LeftMove, Dead, Finish
     }
 
-    public Status status;
+    private Status status;
     private final int number; /* 玩家編號 */
     public String name; /* 玩家名稱 */
     public String type; /* 玩家腳色型態 */
@@ -24,11 +24,21 @@ public class Player {
     private final Gravity gravity = new Gravity(this);
     public final Friction friction = new Friction(this);
 
+    /* 在方塊上的水平移動速度 */
+    private final int velocity_x_Normal = 80;
+    private final int velocity_x_Ice = 60;
+    private final int velocity_x_Honey = 40;
+
+    /* 在方塊上的跳躍初速度，越快跳躍高 */
+    private final int velocity_jump_Normal = 260;
+    private final int velocity_jump_Ice = 260;
+    private final int velocity_jump_Honey = 230;
+
     /* 遊戲畫面大小設定 */
     private final int gameHeight = 600; /* 畫面高度 */
     private final int gameWidth = 900; /* 畫面寬度 */
-    public final int roleHeight = 48; /* 腳色高度 */
-    public final int roleWidth = 48; /* 腳色寬度 */
+    private final int roleHeight = 48; /* 腳色高度 */
+    private final int roleWidth = 48; /* 腳色寬度 */
 
     public Player(int number) {
         this.number = number;
@@ -36,6 +46,10 @@ public class Player {
 
     public int getNumber() {
         return number;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public void setInitialPosition(float i) {
@@ -68,11 +82,12 @@ public class Player {
 
     public void moveRight() {
         if (!friction.isWorking()) { /* 沒有正在煞車才可以移動 */
+            status = Status.RightMove; /* 變更腳色狀態 */
             /* 依地面材質決定速度 */
             switch (blockTypeNumberUnderFoot) {
-                case 2 -> velocity_x = 90; /* Ice */
-                case 3 -> velocity_x = 30; /* Honey */
-                default -> velocity_x = 70; /* Normal */
+                case 2 -> velocity_x = velocity_x_Ice; /* Ice */
+                case 3 -> velocity_x = velocity_x_Honey; /* Honey */
+                default -> velocity_x = velocity_x_Normal; /* Normal */
             }
             this.move((float) (velocity_x / 100), 0);
         }
@@ -80,13 +95,32 @@ public class Player {
 
     public void moveLeft() {
         if (!friction.isWorking()) { /* 沒有正在煞車才可以移動 */
+            status = Status.LeftMove; /* 變更腳色狀態 */
             /* 依地面材質決定速度 */
             switch (blockTypeNumberUnderFoot) {
-                case 2 -> velocity_x = -90; /* Ice */
-                case 3 -> velocity_x = -30; /* Honey */
-                default -> velocity_x = -70; /* Normal */
+                case 2 -> velocity_x = -velocity_x_Ice; /* Ice */
+                case 3 -> velocity_x = -velocity_x_Honey; /* Honey */
+                default -> velocity_x = -velocity_x_Normal; /* Normal */
             }
             this.move((float) (velocity_x / 100), 0);
+        }
+    }
+
+    public void stopMoveRight() {
+        /* 停止右移 */
+        if (status == Status.RightMove) {
+            if (blockTypeNumberUnderFoot != 0)
+                friction.add();
+            status = Status.Idle;
+        }
+    }
+
+    public void stopMoveLeft() {
+        /* 停止左移 */
+        if (status == Status.LeftMove) {
+            if (blockTypeNumberUnderFoot != 0)
+                friction.add();
+            status = Status.Idle;
         }
     }
 
@@ -94,9 +128,9 @@ public class Player {
         float verticalVelocity0;
         /* 依地面材質決定跳躍高度 */
         switch (blockTypeNumberUnderFoot) {
-            case 2 -> verticalVelocity0 = -260; /* Ice */
-            case 3 -> verticalVelocity0 = -230; /* Honey */
-            default -> verticalVelocity0 = -260; /* Normal */
+            case 2 -> verticalVelocity0 = -velocity_jump_Ice; /* Ice */
+            case 3 -> verticalVelocity0 = -velocity_jump_Honey; /* Honey */
+            default -> verticalVelocity0 = -velocity_jump_Normal; /* Normal */
         }
         gravity.add(verticalVelocity0);
     }
@@ -184,12 +218,10 @@ public class Player {
                 gravity.add(0);
             }
         }
-
         /* 抵達終點 */
         if ((750 < temp_x && temp_x < 900) && temp_y == 250 - roleHeight) {
             status = Status.Finish;
         }
-
         /* 更新位置 */
         position[0] = temp_x;
         position[1] = temp_y;

@@ -39,7 +39,7 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
         if (isPlayer1Jumping) {  /* 彈跳獨立出來判斷才能實現斜上跳躍 */
             Main.player1.jump();
         }
-        switch (Main.player1.status) {
+        switch (Main.player1.getStatus()) {
             case Dead:
                 if (!isPlayer1DeadHandled) {
                     /* 死亡後處理 */
@@ -59,7 +59,7 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
         if (isPlayer2Jumping) {  /* 彈跳獨立出來判斷才能實現斜上跳躍 */
             Main.player2.jump();
         }
-        switch (Main.player2.status) {
+        switch (Main.player2.getStatus()) {
             case Dead:
                 if (!isPlayer2DeadHandled) {
                     /* 死亡後處理 */
@@ -76,8 +76,8 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
                 break;
         }
         /* 判斷回合是否結束 */
-        if (Main.player1.status == Player.Status.Dead || Main.player1.status == Player.Status.Finish) {
-            if (Main.player2.status == Player.Status.Dead || Main.player2.status == Player.Status.Finish) {
+        if (Main.player1.getStatus() == Player.Status.Dead || Main.player1.getStatus() == Player.Status.Finish) {
+            if (Main.player2.getStatus() == Player.Status.Dead || Main.player2.getStatus() == Player.Status.Finish) {
                 showResult();
             }
         }
@@ -131,208 +131,6 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
         Main.player2.setInitialPosition(10);
         updateAllPlayersOnMap();
     }
-
-    @Override
-    public void handle(KeyEvent e) {
-        /* 初始(選擇方塊放置位置時)處理鍵盤事件 */
-        if (!isPlayer1BlockPlaced) {
-            /* 玩家1 更新方塊位置 */
-            switch (e.getCode()) {
-                case W:
-                    /* 玩家1 方塊向上移動 */
-                    Main.player1.blockIndex[0] -= 1;
-                    break;
-                case S:
-                    /* 玩家1 方塊向下移動 */
-                    Main.player1.blockIndex[0] += 1;
-                    break;
-                case D:
-                    /* 玩家1 方塊向右移動 */
-                    Main.player1.blockIndex[1] += 1;
-                    break;
-                case A:
-                    /* 玩家1 方塊向左移動 */
-                    Main.player1.blockIndex[1] -= 1;
-                    break;
-                case F:
-                    /* 玩家1 旋轉*/
-                    Main.player1.currentBlock.getShape().clockwiseRotate();
-                    break;
-                case SPACE:
-                    /* 玩家1 確認 */
-                    if (placedBlockOnMap(Main.player1)) {
-                        Main.player1.currentBlock = null;
-                        isPlayer1BlockPlaced = true;
-                    }
-                    break;
-            }
-        }
-        if (!isPlayer2BlockPlaced) {
-            /* 玩家2 更新方塊位置 */
-            switch (e.getCode()) {
-                case UP:
-                    /* 玩家2 方塊向上移動 */
-                    Main.player2.blockIndex[0] -= 1;
-                    break;
-                case DOWN:
-                    /* 玩家2 方塊向下移動 */
-                    Main.player2.blockIndex[0] += 1;
-                    break;
-                case RIGHT:
-                    /* 玩家2 方塊向右移動 */
-                    Main.player2.blockIndex[1] += 1;
-                    break;
-                case LEFT:
-                    /* 玩家2 方塊向左移動 */
-                    Main.player2.blockIndex[1] -= 1;
-                    break;
-                case DELETE:
-                    /* 玩家2 旋轉*/
-                    Main.player2.currentBlock.getShape().clockwiseRotate();
-                    break;
-                case ENTER:
-                    /* 玩家2 確認 */
-                    if (placedBlockOnMap(Main.player2)) {
-                        Main.player2.currentBlock = null;
-                        isPlayer2BlockPlaced = true;
-                    }
-                    break;
-            }
-        }
-        if (!(isPlayer1BlockPlaced && isPlayer2BlockPlaced)) {
-            /* 還有玩家沒放好方塊，進行放方塊地圖更新 */
-            updateBlocksOnMap();
-            previewBlockOnMap(Main.player1);
-            previewBlockOnMap(Main.player2);
-        } else {
-            /* 兩個玩家都已放好方塊，進行遊玩功能 */
-            updateBlocksOnMap();
-            /* 去除方塊放置區域格線 */
-            gridPaneBlocks.setGridLinesVisible(false);
-            /* 定時器(更新腳色位置)開始，循環次數: 無限 */
-            timerUpdate.setCycleCount(Animation.INDEFINITE);
-            timerUpdate.play();
-            /* 轉交鍵盤事件控制權 */
-            scene.setOnKeyPressed(handlePressPlay);
-            scene.setOnKeyReleased(handleReleasePlay);
-        }
-    }
-
-    private EventHandler<KeyEvent> handlePressPlay = new EventHandler<KeyEvent>() {
-        /* (按下)腳色在地圖中自由移動時使用這個處理鍵盤事件 */
-        @Override
-        public void handle(KeyEvent e) {
-            /* Player 1 */
-            if (Main.player1.status != Player.Status.Dead && Main.player1.status != Player.Status.Finish) {
-                switch (e.getCode()) {
-                    case A:
-                        /* 左移 */
-                        setRoleDirection(Main.player1, "left");
-                        Main.player1.status = Player.Status.LeftMove;
-                        Main.player1.moveLeft();
-                        break;
-                    case D:
-                        /* 右移 */
-                        setRoleDirection(Main.player1, "right");
-                        Main.player1.status = Player.Status.RightMove;
-                        Main.player1.moveRight();
-                        break;
-                    case W:
-                        /* 跳躍 */
-                        isPlayer1Jumping = true;
-                        break;
-                    case Q:
-                        /* 放棄 */
-                        Main.player1.giveUp();
-                        break;
-                }
-//            System.out.println("Player1 Pos: " + imagePlayer1.getLayoutX() + " " + imagePlayer1.getLayoutY());
-            }
-            /* Player 2 */
-            if (Main.player2.status != Player.Status.Dead && Main.player2.status != Player.Status.Finish) {
-                switch (e.getCode()) {
-                    case LEFT:
-                        /* 左移 */
-                        setRoleDirection(Main.player2, "left");
-                        Main.player2.status = Player.Status.LeftMove;
-                        Main.player2.moveLeft();
-                        break;
-                    case RIGHT:
-                        /* 右移 */
-                        setRoleDirection(Main.player2, "right");
-                        Main.player2.status = Player.Status.RightMove;
-                        Main.player2.moveRight();
-                        break;
-                    case UP:
-                        /* 跳躍 */
-                        isPlayer2Jumping = true;
-                        break;
-                    case END:
-                        /* 放棄 */
-                        Main.player2.giveUp();
-                        break;
-                }
-            }
-        }
-    };
-
-    private EventHandler<KeyEvent> handleReleasePlay = new EventHandler<KeyEvent>() {
-        /* (鬆開)腳色在地圖中自由移動時使用這個處理鍵盤事件 */
-        @Override
-        public void handle(KeyEvent e) {
-            // System.out.println("KeyRelease: " + e.getCode());
-            /* Player 1 */
-            if (Main.player1.status != Player.Status.Dead) {
-                switch (e.getCode()) {
-                    case A:
-                        /* 停止左移 */
-                        if (Main.player1.status == Player.Status.LeftMove) {
-                            if (Main.player1.blockTypeNumberUnderFoot != 0)
-                                Main.player1.friction.add();
-                            Main.player1.status = Player.Status.Idle;
-                        }
-                        break;
-                    case D:
-                        /* 停止右移 */
-                        if (Main.player1.status == Player.Status.RightMove) {
-                            if (Main.player1.blockTypeNumberUnderFoot != 0)
-                                Main.player1.friction.add();
-                            Main.player1.status = Player.Status.Idle;
-                        }
-                        break;
-                    case W:
-                        /* 停止跳躍 */
-                        isPlayer1Jumping = false;
-                        break;
-                }
-            }
-            /* Player 2 */
-            if (Main.player2.status != Player.Status.Dead) {
-                switch (e.getCode()) {
-                    case LEFT:
-                        /* 停止左移 */
-                        if (Main.player2.status == Player.Status.LeftMove) {
-                            if (Main.player2.blockTypeNumberUnderFoot != 0)
-                                Main.player2.friction.add();
-                            Main.player2.status = Player.Status.Idle;
-                        }
-                        break;
-                    case RIGHT:
-                        /* 停止右移 */
-                        if (Main.player2.status == Player.Status.RightMove) {
-                            if (Main.player2.blockTypeNumberUnderFoot != 0)
-                              Main.player2.friction.add();
-                            Main.player2.status = Player.Status.Idle;
-                        }
-                        break;
-                    case UP:
-                        /* 停止跳躍 */
-                        isPlayer2Jumping = false;
-                        break;
-                }
-            }
-        }
-    };
 
     boolean placedBlockOnMap(Player player) {
         /* 將確定位置的方塊更新到Main.blockDistribution中 */
@@ -446,6 +244,188 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
         }
     }
 
+    @Override
+    public void handle(KeyEvent e) {
+        /* 初始(選擇方塊放置位置時)處理鍵盤事件 */
+        if (!isPlayer1BlockPlaced) {
+            /* 玩家1 更新方塊位置 */
+            switch (e.getCode()) {
+                case W:
+                    /* 玩家1 方塊向上移動 */
+                    Main.player1.blockIndex[0] -= 1;
+                    break;
+                case S:
+                    /* 玩家1 方塊向下移動 */
+                    Main.player1.blockIndex[0] += 1;
+                    break;
+                case D:
+                    /* 玩家1 方塊向右移動 */
+                    Main.player1.blockIndex[1] += 1;
+                    break;
+                case A:
+                    /* 玩家1 方塊向左移動 */
+                    Main.player1.blockIndex[1] -= 1;
+                    break;
+                case F:
+                    /* 玩家1 旋轉*/
+                    Main.player1.currentBlock.getShape().clockwiseRotate();
+                    break;
+                case SPACE:
+                    /* 玩家1 確認 */
+                    if (placedBlockOnMap(Main.player1)) {
+                        Main.player1.currentBlock = null;
+                        isPlayer1BlockPlaced = true;
+                    }
+                    break;
+            }
+        }
+        if (!isPlayer2BlockPlaced) {
+            /* 玩家2 更新方塊位置 */
+            switch (e.getCode()) {
+                case UP:
+                    /* 玩家2 方塊向上移動 */
+                    Main.player2.blockIndex[0] -= 1;
+                    break;
+                case DOWN:
+                    /* 玩家2 方塊向下移動 */
+                    Main.player2.blockIndex[0] += 1;
+                    break;
+                case RIGHT:
+                    /* 玩家2 方塊向右移動 */
+                    Main.player2.blockIndex[1] += 1;
+                    break;
+                case LEFT:
+                    /* 玩家2 方塊向左移動 */
+                    Main.player2.blockIndex[1] -= 1;
+                    break;
+                case DELETE:
+                    /* 玩家2 旋轉*/
+                    Main.player2.currentBlock.getShape().clockwiseRotate();
+                    break;
+                case ENTER:
+                    /* 玩家2 確認 */
+                    if (placedBlockOnMap(Main.player2)) {
+                        Main.player2.currentBlock = null;
+                        isPlayer2BlockPlaced = true;
+                    }
+                    break;
+            }
+        }
+        if (!(isPlayer1BlockPlaced && isPlayer2BlockPlaced)) {
+            /* 還有玩家沒放好方塊，進行放方塊地圖更新 */
+            updateBlocksOnMap();
+            previewBlockOnMap(Main.player1);
+            previewBlockOnMap(Main.player2);
+        } else {
+            /* 兩個玩家都已放好方塊，進行遊玩功能 */
+            updateBlocksOnMap();
+            /* 去除方塊放置區域格線 */
+            gridPaneBlocks.setGridLinesVisible(false);
+            /* 定時器(更新腳色位置)開始，循環次數: 無限 */
+            timerUpdate.setCycleCount(Animation.INDEFINITE);
+            timerUpdate.play();
+            /* 轉交鍵盤事件控制權 */
+            scene.setOnKeyPressed(handlePressPlay);
+            scene.setOnKeyReleased(handleReleasePlay);
+        }
+    }
+
+    private EventHandler<KeyEvent> handlePressPlay = new EventHandler<KeyEvent>() {
+        /* (按下)腳色在地圖中自由移動時使用這個處理鍵盤事件 */
+        @Override
+        public void handle(KeyEvent e) {
+            /* Player 1 */
+            if (Main.player1.getStatus() != Player.Status.Dead && Main.player1.getStatus() != Player.Status.Finish) {
+                switch (e.getCode()) {
+                    case A:
+                        /* 左移 */
+                        setRoleDirection(Main.player1, "left");
+                        Main.player1.moveLeft();
+                        break;
+                    case D:
+                        /* 右移 */
+                        setRoleDirection(Main.player1, "right");
+                        Main.player1.moveRight();
+                        break;
+                    case W:
+                        /* 跳躍 */
+                        isPlayer1Jumping = true;
+                        break;
+                    case Q:
+                        /* 放棄 */
+                        Main.player1.giveUp();
+                        break;
+                }
+//            System.out.println("Player1 Pos: " + imagePlayer1.getLayoutX() + " " + imagePlayer1.getLayoutY());
+            }
+            /* Player 2 */
+            if (Main.player2.getStatus() != Player.Status.Dead && Main.player2.getStatus() != Player.Status.Finish) {
+                switch (e.getCode()) {
+                    case LEFT:
+                        /* 左移 */
+                        setRoleDirection(Main.player2, "left");
+                        Main.player2.moveLeft();
+                        break;
+                    case RIGHT:
+                        /* 右移 */
+                        setRoleDirection(Main.player2, "right");
+                        Main.player2.moveRight();
+                        break;
+                    case UP:
+                        /* 跳躍 */
+                        isPlayer2Jumping = true;
+                        break;
+                    case END:
+                        /* 放棄 */
+                        Main.player2.giveUp();
+                        break;
+                }
+            }
+        }
+    };
+
+    private EventHandler<KeyEvent> handleReleasePlay = new EventHandler<KeyEvent>() {
+        /* (鬆開)腳色在地圖中自由移動時使用這個處理鍵盤事件 */
+        @Override
+        public void handle(KeyEvent e) {
+            // System.out.println("KeyRelease: " + e.getCode());
+            /* Player 1 */
+            if (Main.player1.getStatus() != Player.Status.Dead) {
+                switch (e.getCode()) {
+                    case A:
+                        /* 停止左移 */
+                        Main.player1.stopMoveLeft();
+                        break;
+                    case D:
+                        /* 停止右移 */
+                        Main.player1.stopMoveRight();
+                        break;
+                    case W:
+                        /* 停止跳躍 */
+                        isPlayer1Jumping = false;
+                        break;
+                }
+            }
+            /* Player 2 */
+            if (Main.player2.getStatus() != Player.Status.Dead) {
+                switch (e.getCode()) {
+                    case LEFT:
+                        /* 停止左移 */
+                        Main.player2.stopMoveLeft();
+                        break;
+                    case RIGHT:
+                        /* 停止右移 */
+                        Main.player2.stopMoveRight();
+                        break;
+                    case UP:
+                        /* 停止跳躍 */
+                        isPlayer2Jumping = false;
+                        break;
+                }
+            }
+        }
+    };
+
     void updateAllPlayersOnMap() {
         imagePlayer1.setLayoutX(Main.player1.position[0]);
         imagePlayer1.setLayoutY(Main.player1.position[1]);
@@ -484,18 +464,18 @@ public class ctr_PlayingMap implements EventHandler<KeyEvent> {
             player2Name.setText(Main.player2.name);
             String p1ScoreText;
             String p2ScoreText;
-            if (Main.player1.status == Player.Status.Finish && Main.player2.status == Player.Status.Finish) {
+            if (Main.player1.getStatus() == Player.Status.Finish && Main.player2.getStatus() == Player.Status.Finish) {
                 /* 兩個玩家都到終點 */
                 p1ScoreText = Main.player1.score + " +1";
                 Main.player1.score += 1;
                 p2ScoreText = Main.player2.score + " +1";
                 Main.player2.score += 1;
-            } else if (Main.player1.status == Player.Status.Finish) {
+            } else if (Main.player1.getStatus() == Player.Status.Finish) {
                 /* 只有玩家1到終點 */
                 p1ScoreText = Main.player1.score + " +2";
                 Main.player1.score += 2;
                 p2ScoreText = Main.player2.score + " +0";
-            } else if (Main.player2.status == Player.Status.Finish) {
+            } else if (Main.player2.getStatus() == Player.Status.Finish) {
                 /* 只有玩家2到終點 */
                 p1ScoreText = Main.player1.score + " +0";
                 p2ScoreText = Main.player2.score + " +2";
